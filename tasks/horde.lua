@@ -202,7 +202,7 @@ function horde:handle_actions(action, target)
             console.print("Boss room unlocked")
         end
     elseif action == "attack_target" or action == "collect_aether" then
-        if target and utils.distance_to(target) > 3 then
+        if target and utils.distance_to(target) > 1 then
             pathfinder.force_move_raw(target:get_position())
         else
             shoot_in_circle()
