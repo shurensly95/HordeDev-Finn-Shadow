@@ -8,7 +8,7 @@ local ATTEMPT_DELAY = 5 -- seconds
 local POWERSHELL_WAIT_TIME = 1 -- seconds
 
 local function execute_powershell_script()
-    local script_path = --"C:\\your_location\\diablo_qqt\\scripts\\HordeDev-Finn\\send_key.ps1"
+    local script_path = "C:\\users\\finnd\\desktop\\diablo_qqt\\scripts\\HordeDev-Finn\\send_key.ps1"
     local command = string.format('start /b powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File "%s"', script_path)
     
     local result = os.execute(command)
