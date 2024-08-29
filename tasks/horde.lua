@@ -156,13 +156,13 @@ function horde:perform_pre_boss_loot()
     if tracker.aether_route and #tracker.aether_route > 0 then
         local current_aether = tracker.aether_route[1]
         if current_aether and utils.distance_to(current_aether) > 2 then
-            pathfinder.force_move_raw(current_aether:get_position())
+            pathfinder.request_move(current_aether:get_position())
         else
             table.remove(tracker.aether_route, 1)
             console.print("Collected aether, " .. #tracker.aether_route .. " points remaining")
         end
     elseif utils.distance_to(pre_boss_position) > .5 then
-        pathfinder.force_move_raw(pre_boss_position)
+        pathfinder.request_move(pre_boss_position)
     else
         tracker.pre_boss_loot_completed = true
         console.print("Pre-boss loot completed, ready to enter boss room")
@@ -195,7 +195,7 @@ function horde:handle_actions(action, target)
         pylon_logic.handle_pylon_interaction(target, self.pylon_interaction_cooldown)
     elseif action == "interact_door" then
         if utils.distance_to(target) > 2 then
-            pathfinder.force_move_raw(target:get_position())
+            pathfinder.request_move(target:get_position())
         else
             interact_object(target)
             tracker.boss_room_unlocked = true
@@ -203,7 +203,7 @@ function horde:handle_actions(action, target)
         end
     elseif action == "attack_target" or action == "collect_aether" then
         if target and utils.distance_to(target) > 1 then
-            pathfinder.force_move_raw(target:get_position())
+            pathfinder.request_move(target:get_position())
         else
             shoot_in_circle()
         end
@@ -212,7 +212,7 @@ function horde:handle_actions(action, target)
         self:perform_pre_boss_loot()
     elseif action == "move_to_boss_room" then
         if utils.distance_to(horde_boss_room_position) > 1 then
-            pathfinder.force_move_raw(horde_boss_room_position)
+            pathfinder.request_move(horde_boss_room_position)
         else
             tracker.in_boss_room = true
             console.print("Reached boss room position")

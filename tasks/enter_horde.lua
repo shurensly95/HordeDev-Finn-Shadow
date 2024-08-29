@@ -25,6 +25,12 @@ end
 local function enter_horde(portal)
     if portal and utils.distance_to(portal) < 2 then
         console.print("Player is close enough to the portal. Interacting with the portal.")
+        
+        -- Wait for 1 second (10 yields assuming 10 yields per second)
+        for i = 1, 10 do
+            coroutine.yield()
+        end
+        
         interact_object(portal)
         return true
     end
