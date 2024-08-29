@@ -5,6 +5,7 @@ local tracker = require "core.tracker"
 local function use_dungeon_sigil()
     if utils.get_horde_portal() then
         console.print("Horde already opened this session. Skipping.")
+        tracker.sigil_used = true
         tracker.horde_opened = true
         return tracker.horde_opened
     end
@@ -18,7 +19,7 @@ local function use_dungeon_sigil()
             local success, error = pcall(use_item, item)
             if success then
                 console.print("Successfully used Dungeon Sigil.")
-                tracker.horde_opened = true
+                tracker.sigil_used = true
                 tracker.first_run = true
                 return true
             else
@@ -34,7 +35,8 @@ end
 local start_dungeon_task = {
     name = "Start Dungeon",
     shouldExecute = function()
-        return utils.player_in_zone("Kehj_Caldeum") 
+        return utils.player_in_zone("Kehj_Caldeum")
+            and not tracker.sigil_used 
             and not tracker.horde_opened         
     end,
 
@@ -46,7 +48,7 @@ local start_dungeon_task = {
         end
 
         local elapsed_time = current_time - tracker.start_dungeon_time
-        if elapsed_time >= 5 then
+        if elapsed_time >= 5 and not tracker.sigil_used then
             console.print("Time to farm! Attempting to use Dungeon Sigil")
             use_dungeon_sigil()
         else

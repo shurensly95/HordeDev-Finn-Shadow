@@ -35,6 +35,7 @@ local tracker = {
 }
 
 function tracker.reset_horde_trackers()
+    tracker.sigil_used = false
     tracker.horde_opened = false
     tracker.horde_entered = false
     tracker.horde_completed = false
