@@ -5,19 +5,19 @@ local explorer = require "core.explorer"
 
 local MAX_ATTEMPTS = 5
 local ATTEMPT_DELAY = 5 -- seconds
-local POWERSHELL_WAIT_TIME = 3 -- seconds
+local BAT_WAIT_TIME = 3 -- seconds
 local horde_portal_coords = vec3:new(30.581279754639, -477.47695922852, -24.44921875)
 
-local function execute_powershell_script()
-    local script_path = "C:\\users\\finnd\\desktop\\diablo_qqt\\scripts\\HordeDev-Finn\\send_key.ps1"
-    local command = string.format('start /b powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File "%s"', script_path)
+local function execute_bat_script()
+    local script_path = "C:\\Users\\send_key.bat"
+    local command = string.format('start ""/b "%s"', script_path)
     
     local result = os.execute(command)
     if result then
-        console.print("PowerShell script execution initiated.")
+        console.print("Batch file execution initiated.")
         return true
     else
-        console.print("Failed to initiate PowerShell script execution")
+        console.print("Failed to initiate batch file execution.")
         return false
     end
 end
@@ -54,9 +54,9 @@ local enter_horde_task = {
                     tracker.horde_attempt_count = tracker.horde_attempt_count + 1
                     console.print("Attempt " .. tracker.horde_attempt_count .. " to open horde portal")
 
-                    if execute_powershell_script() then
-                        -- Wait for PowerShell script to potentially open the portal
-                        for i = 1, POWERSHELL_WAIT_TIME * 10 do  -- 10 checks per second
+                    if execute_bat_script() then
+                        -- Wait for the batch file to potentially open the portal
+                        for i = 1, BAT_WAIT_TIME * 10 do  -- 10 checks per second
                             coroutine.yield()
                             if utils.get_horde_portal() then
                                 tracker.horde_opened = true
@@ -71,7 +71,7 @@ local enter_horde_task = {
                             console.print("Portal did not open. Will retry.")
                         end
                     else
-                        console.print("PowerShell script execution failed. Will retry.")
+                        console.print("Batch file execution failed. Will retry.")
                     end
 
                     -- Wait before next attempt
@@ -93,10 +93,10 @@ local enter_horde_task = {
                                 end
                             elseif distance_to_portal < 28 then
                                 console.print("Moving closer to the portal.")
-                                pathfinder.force_move_raw(horde_portal_coords) --path = pathfinder.create_path_game_engine(horde_portal_coords)
+                                pathfinder.force_move_raw(horde_portal_coords)
                                 
                                 -- Wait for movement to complete
-                                for i = 1, 0 do  -- Wait up to 5 seconds
+                                for i = 1, 50 do  -- Wait up to 5 seconds
                                     coroutine.yield()
                                     if utils.distance_to(portal) < 2 then
                                         break
